@@ -1,10 +1,19 @@
 import { Modal, Button } from 'react-bootstrap';
 import _ from "lodash"
-
+import { deleteUsers } from '../services/UserServices';
+import { toast } from 'react-toastify';
 const ModalConfirm = (addNewProps) => {
-    const { show, handleClose, dataDeleteUsers } = addNewProps;
-    const confirmDelete = () => {
-
+    const { show, handleClose, dataDeleteUsers, handleDeleteUsersFromModal } = addNewProps;
+    const confirmDelete = async () => {
+        let res = await deleteUsers(dataDeleteUsers.id)
+        if (res && +res.statusCode === 204) {
+            toast.success("Delete user success");
+            handleClose();
+            handleDeleteUsersFromModal(dataDeleteUsers);
+        }
+        else {
+            toast.error("Delete user fail");
+        }
     }
     return (
         <>
